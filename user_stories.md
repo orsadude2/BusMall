@@ -16,4 +16,4 @@
 #H2 As Marketing group
 ..* Make sure developer has enough/correct pictures
 ..* After 25 tries app shows # times each picture was shown and % of time shown/selected
-..* List in order the top items
+..* List in order the top items picked
