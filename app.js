@@ -1,7 +1,7 @@
 'User Strict';
 // Things to do
 // 1. Create an array to store the pictures of products
-Products.allProducts = [];
+
 // 2. Make a product object
 Products.allProducts = [];
 function Products(name, filepath) {
@@ -33,6 +33,9 @@ new Product('water-can', 'img/water-can.jpg');
 new Product('wine-glass', 'img/wine-glass.jpg');
 
 // 4. Create a listener function to click on the product image of choice
+var imgEl = document.getElementById('products');
+
+imgEl.addEventListener('click',genran);
 // 5. Figure a way to display 3 random pictures at a time
 
 // This code just lets me know I can calculate 20 random numbers through a loop
@@ -41,15 +44,17 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 //   var rannum = Math.floor(Math.random(i) * 20);
 //   console.log(rannum);
 // };
-help;
 
 for (i = 0; i < 3; i++) {
   var pic = genran();
   console.log(pic);
+  imgEl.src = Products.allProducts[pic].filepath;
+
 };
 
 function genran() {
-  return Math.floor(Math.random() * 20);
+  return Math.floor(Math.random() * Products.allProducts.length);
+
 };
 genran();
 
