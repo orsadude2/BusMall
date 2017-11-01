@@ -41,6 +41,7 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 //   var rannum = Math.floor(Math.random(i) * 20);
 //   console.log(rannum);
 // };
+help;
 
 for (i = 0; i < 3; i++) {
   var pic = genran();
