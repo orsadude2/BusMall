@@ -1,56 +1,97 @@
-'User Strict';
-// Things to do
-// 1. Create an array to store the pictures of products
-Products.allProducts = [];
-// 2. Make a product object
-Products.allProducts = [];
-function Products(name, filepath) {
+'use strict';
+
+//we need an array of images
+//we need a constructor function for products
+//we need an event listener
+//we need an image repository
+//we need to randomize the images
+//we need a counter
+//event handler
+//we need to display the list
+//make sure they don't repeat images
+//DOM appending
+
+Product.names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can',
+'wine-glass'];
+
+Product.all = [];
+Product.container = document.getElementById('image_container');
+Product.justViewed = [];
+Product.pics = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
+Product.tally = document.getElementById('tally');
+Product.totalClicks = 0;
+
+function Product(name) {
   this.name = name;
-  this.filepath = filepath;
-  Products.allProducts.push(this);
-
+  this.path = 'img/' + name + '.jpg';
+  this.votes = 0;
+  this.views = 0;
+  Product.all.push(this);
 }
-// 3. Make new instances of the product object using a constructor function
-new Product('bag', 'img/bag.jpg');
-new Product('banana', 'img/banana.jpg');
-new Product('bathroom', 'img/bathroom.jpg');
-new Product('boots', 'img/boots.jpg');
-new Product('breakfast', 'img/breakfast.jpg');
-new Product('bubblegum', 'img/bubblegum.jpg');
-new Product('chair', 'img/chair.jpg');
-new Product('cthulhu', 'img/cthulhu.jpg');
-new Product('dog-duck', 'img/dog-duck.jpg');
-new Product('dragon', 'img/dragon.jpg');
-new Product('pen', 'img/pen.jpg');
-new Product('pet-sweep', 'img/pet-sweep.jpg');
-new Product('scissors', 'img/scissors.jpg');
-new Product('shark', 'img/shark.jpg');
-new Product('sweep', 'img/sweep.png');
-new Product('tauntaun', 'img/tauntaun.jpg');
-new Product('unicorn', 'img/unicorn.jpg');
-new Product('usb', 'img/usb.gif');
-new Product('water-can', 'img/water-can.jpg');
-new Product('wine-glass', 'img/wine-glass.jpg');
+for(var i = 0; i < Product.names.length; i++) {
+  new Product(Product.names[i]);
+}
 
-// 4. Create a listener function to click on the product image of choice
-// 5. Figure a way to display 3 random pictures at a time
+function makeRandom() {
+  return Math.floor(Math.random() * Product.names.length);
+}
 
-// This code just lets me know I can calculate 20 random numbers through a loop
-// var rannum = Math.floor(Math.random() * 20);
-// for (i = 0; i < 20; i++) {
-//   var rannum = Math.floor(Math.random(i) * 20);
-//   console.log(rannum);
-// };
-help;
+function displayPics() {
+  var currentlyShowing = [];
+  //make left image unique
+  currentlyShowing[0] = makeRandom();
+  while (Product.justViewed.indexOf(currentlyShowing[0]) !== -1) {
+    console.error('Duplicate, or in prior view! Re run!');
+    currentlyShowing[0] = makeRandom();
+  }
+  //make center image unique
+  currentlyShowing[1] = makeRandom();
+  while(currentlyShowing[0] === currentlyShowing[1] || Product.justViewed.indexOf(currentlyShowing[1]) !== -1) {
+    console.error('Duplicate at center, or in prior view! Re run!');
+    currentlyShowing[1] = makeRandom();
+  }
+  //make right image unique
+  currentlyShowing[2] = makeRandom();
+  while(currentlyShowing[0] === currentlyShowing[2] || currentlyShowing[1] === currentlyShowing[2] || Product.justViewed.indexOf(currentlyShowing[2]) !== -1) {
+    console.error('Duplicate at 3rd one! Re run it!');
+    currentlyShowing[2] = makeRandom();
+  }
+  //take the info to the DOM!...and beyond...
+  for(var i = 0; i < 3; i++) {
+    Product.pics[i].src = Product.all[currentlyShowing[i]].path;
+    Product.pics[i].id = Product.all[currentlyShowing[i]].name;
+    Product.all[currentlyShowing[i]].views += 1;
+    Product.justViewed[i] = currentlyShowing[i];
+  }
+}
+//handle click events
 
-for (i = 0; i < 3; i++) {
-  var pic = genran();
-  console.log(pic);
-};
-
-function genran() {
-  return Math.floor(Math.random() * 20);
-};
-genran();
-
-/* generate code to make sure 3 random #'s not equal to each other */
+function handleClick(event) {
+  console.log(Product.totalClicks, 'total clicks');
+  if(Product.totalClicks > 24) {
+    Product.container.removeEventListener('click', handleClick);
+    showTally();
+  }
+  if (event.target.id === 'image_container') {
+    return alert('Nope, you need to click on an image.');
+  }
+  Product.totalClicks += 1;
+  for(var i = 0; i < Product.names.length; i++) {
+    if(event.target.id === Product.all[i].name) {
+      Product.all[i].votes += 1;
+      console.log(event.target.id + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views');
+    }
+  }
+  displayPics();
+}
+//show tally using list in DOM
+function showTally() {
+  for(var i = 0; i < Product.all.length; i++) {
+    var liEl = document.createElement('li');
+    liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
+    Product.tally.appendChild(liEl);
+  }
+}
+//event listener
+Product.container.addEventListener('click', handleClick);
+displayPics();
