@@ -1,5 +1,10 @@
-#products {
-  border: 5px color: red;
-  height: 250px;
-  width: auto;
+* {
+  color: salmon;
+  font-family: 'Helvetica';
+  outline: 1px dashed green;
+}
+
+img {
+  width: 150px;
+  margin: 25px;
 }
