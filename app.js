@@ -1,26 +1,17 @@
 'use strict';
-
-//we need an array of images
-//we need a constructor function for products
-//we need an event listener
-//we need an image repository
-//we need to randomize the images
-//we need a counter
-//event handler
-//we need to display the list
-//make sure they don't repeat images
-//DOM appending
-
-Product.names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can',
-'wine-glass'];
-
+// Creating an array of all of the product image names
+Product.names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can','wine-glass'];
+// Creating an array with both names and images
+// Product.names = [{name:'bag', image: 'bag.jpg'}, {name:'banana', image: 'banana.jpg'}, {name: 'bathroom', image: 'bathroom.jpg'}, {name:'boots',image:'boots.jpg'}, {name:'breakfast', image: 'breakast.jpg'}, {name:'bubblegum', image:'bubblegum.jpg'}, {name:'chair',image:'chair.jpg'}, {name:'cthulhu',image:'cthulhu.jpg'}, {name:'dog-duck',image:'dog-duck.jpg'}, {name:'dragon',image:'dragon.jpg'}, {name:'pen', image:'pen.jpg'}, {name:'pet-sweep', image:'pet-sweep.jpg'}, {name:'scissors',image:'scissors.jpg'}, {name:'shark', image:'shark.jpg'}, {name:'sweep', image:'sweep.jpg'}, {name:'tauntaun',image:'tauntaun.jpg'}, {name:'unicorn',image:'unicorn.jpg'}, {name:'usb', image:'usb.jpg'}, {name:'water-can',image:'water-can.jpg'},{name:'wine-glass',image:'wine-glass.jpg'}];
+//Creating an object of the products
 Product.all = [];
 Product.container = document.getElementById('image_container');
 Product.justViewed = [];
 Product.pics = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
 Product.tally = document.getElementById('tally');
 Product.totalClicks = 0;
-
+//Constructor function making the product objects and giving them tracking variables
+//and pushing all of the object information into the array product.all
 function Product(name) {
   this.name = name;
   this.path = 'img/' + name + '.jpg';
@@ -38,25 +29,28 @@ function makeRandom() {
 
 function displayPics() {
   var currentlyShowing = [];
-  //make left image unique
+  //creates a left image and makes sure it isn't a repeat or shown in previous trio
+  //of images
   currentlyShowing[0] = makeRandom();
   while (Product.justViewed.indexOf(currentlyShowing[0]) !== -1) {
-    console.error('Duplicate, or in prior view! Re run!');
+    console.error('Left image just shown, or in previous trio!');
     currentlyShowing[0] = makeRandom();
   }
-  //make center image unique
+  //creates a center image and makes sure it isn't a repeat or shown in previous trio
+  //of images
   currentlyShowing[1] = makeRandom();
   while(currentlyShowing[0] === currentlyShowing[1] || Product.justViewed.indexOf(currentlyShowing[1]) !== -1) {
-    console.error('Duplicate at center, or in prior view! Re run!');
+    console.error('Center image just shown, or in previous trio!');
     currentlyShowing[1] = makeRandom();
   }
-  //make right image unique
+  //creates a right image and makes sure it isn't a repeat or shown in previous trio
+  //of images
   currentlyShowing[2] = makeRandom();
   while(currentlyShowing[0] === currentlyShowing[2] || currentlyShowing[1] === currentlyShowing[2] || Product.justViewed.indexOf(currentlyShowing[2]) !== -1) {
-    console.error('Duplicate at 3rd one! Re run it!');
+    console.error('Right image just shown, or in previous trio!');
     currentlyShowing[2] = makeRandom();
   }
-  //take the info to the DOM!...and beyond...
+  // DOM Manipulation
   for(var i = 0; i < 3; i++) {
     Product.pics[i].src = Product.all[currentlyShowing[i]].path;
     Product.pics[i].id = Product.all[currentlyShowing[i]].name;
@@ -64,7 +58,9 @@ function displayPics() {
     Product.justViewed[i] = currentlyShowing[i];
   }
 }
-//handle click events
+//Event handle function to see what image is picked. If the iteration is greater
+//than 24, it turns of the event listener so user can't generate another set of
+//images
 
 function handleClick(event) {
   console.log(Product.totalClicks, 'total clicks');
@@ -73,7 +69,7 @@ function handleClick(event) {
     showTally();
   }
   if (event.target.id === 'image_container') {
-    return alert('Nope, you need to click on an image.');
+    return alert('Only click on images...not outside of them.');
   }
   Product.totalClicks += 1;
   for(var i = 0; i < Product.names.length; i++) {
@@ -84,14 +80,14 @@ function handleClick(event) {
   }
   displayPics();
 }
-//show tally using list in DOM
+//Function to take the tally of clicks and add to the DOM
 function showTally() {
   for(var i = 0; i < Product.all.length; i++) {
     var liEl = document.createElement('li');
-    liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
+    liEl.textContent = Product.all[i].path + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
     Product.tally.appendChild(liEl);
   }
 }
-//event listener
+//Event listner to show next trio of product images upon the selection 'click' of preferred product
 Product.container.addEventListener('click', handleClick);
 displayPics();
