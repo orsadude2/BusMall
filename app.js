@@ -91,3 +91,40 @@ function showTally() {
 //Event listner to show next trio of product images upon the selection 'click' of preferred product
 Product.container.addEventListener('click', handleClick);
 displayPics();
+
+var labelColors = [];
+for(var j = 0; i < Product.names.length; i++){
+  labelColors.push(Product.names[j]);
+};
+console.log(labelColors);
+var newVotes = [];
+var views = [];
+//Function to create 2 new arrays to hold just product tally and product total clicks
+for(var j = 0; i < Product.all.length; i++){
+  views.push(Product.all[j].views);
+  newVotes.push(Product.all[j].votes);
+  labelColors.push(Product.names[j]);
+}
+
+var ctx = document.getElementById('chart').getContext('2d');
+
+var theChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labelColors,
+    datasets: [{
+      label: '# of Votes',
+      data: newVotes,
+      backgroundColor: labelColors
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
+});

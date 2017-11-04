@@ -1,10 +1,10 @@
 h1 {
-  color: blue;
+  color: #ffe082;
   font-family: 'Helvetica';
   /*outline: 1px dashed green;*/
 }
 p {
-  font-family: 'Helvetica';
+  font-family: 'Roboto Mono', monospace;
 }
 
 img {
