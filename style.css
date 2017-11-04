@@ -1,15 +1,16 @@
 h1 {
-  color: blue;
+  color: #cddc39;
   font-family: 'Helvetica';
-  /*outline: 1px dashed green;*/
+  
 }
 p {
-  font-family: 'Helvetica';
+  font-family: 'Roboto Mono', monospace;
 }
 
 img {
   width: 150px;
   margin: 25px;
   padding:1px;
-  border:1px solid red;
+  border:2px solid #ffeb3b;
+  background-color:#ff9800;
 }

@@ -1,6 +1,7 @@
 'use strict';
 // Creating an array of all of the product image names
-Product.names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can','wine-glass'];
+Product.names = ['Bag', 'Banana', 'Bathroom', 'Boots', 'Breakfast', 'Bubblegum', 'Chair', 'Cthulhu', 'Dog-duck', 'Dragon', 'Pen', 'Pet-sweep', 'Scissors', 'Shark', 'Sweep', 'Tauntaun', 'Unicorn', 'USB', 'Water-can','Wine-glass'];
+var newVotes = [];
 // Creating an array with both names and images
 // Product.names = [{name:'bag', image: 'bag.jpg'}, {name:'banana', image: 'banana.jpg'}, {name: 'bathroom', image: 'bathroom.jpg'}, {name:'boots',image:'boots.jpg'}, {name:'breakfast', image: 'breakast.jpg'}, {name:'bubblegum', image:'bubblegum.jpg'}, {name:'chair',image:'chair.jpg'}, {name:'cthulhu',image:'cthulhu.jpg'}, {name:'dog-duck',image:'dog-duck.jpg'}, {name:'dragon',image:'dragon.jpg'}, {name:'pen', image:'pen.jpg'}, {name:'pet-sweep', image:'pet-sweep.jpg'}, {name:'scissors',image:'scissors.jpg'}, {name:'shark', image:'shark.jpg'}, {name:'sweep', image:'sweep.jpg'}, {name:'tauntaun',image:'tauntaun.jpg'}, {name:'unicorn',image:'unicorn.jpg'}, {name:'usb', image:'usb.jpg'}, {name:'water-can',image:'water-can.jpg'},{name:'wine-glass',image:'wine-glass.jpg'}];
 //Creating an object of the products
@@ -66,7 +67,12 @@ function handleClick(event) {
   console.log(Product.totalClicks, 'total clicks');
   if(Product.totalClicks > 24) {
     Product.container.removeEventListener('click', handleClick);
+    for(var j = 0; j < Product.names.length; j++){
+      views.push(Product.all[j].views);
+      newVotes.push(Product.all[j].votes);
+    };
     showTally();
+    makeChart();
   }
   if (event.target.id === 'image_container') {
     return alert('Only click on images...not outside of them.');
@@ -82,7 +88,7 @@ function handleClick(event) {
 }
 //Function to take the tally of clicks and add to the DOM
 function showTally() {
-  for(var i = 0; i < Product.all.length; i++) {
+  for(var i = 0; i < Product.names.length; i++) {
     var liEl = document.createElement('li');
     liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
     Product.tally.appendChild(liEl);
@@ -91,3 +97,41 @@ function showTally() {
 //Event listner to show next trio of product images upon the selection 'click' of preferred product
 Product.container.addEventListener('click', handleClick);
 displayPics();
+
+var labelColors = [];
+for(var j = 0; j < Product.names.length; j++){
+  labelColors.push(Product.names[j]);
+};
+console.log(labelColors);
+
+var views = [];
+//Function to create 2 new arrays to hold just product tally and product total clicks
+// for(var j = 0; j < Product.names.length; j++){
+//   views.push(Product.all[j].views);
+//   newVotes.push(Product.all[j].votes);
+// };
+
+function makeChart(){
+  var ctx = document.getElementById('chart').getContext('2d');
+
+  var theChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labelColors,
+      datasets: [{
+        label: '# of Votes',
+        data: newVotes,
+        backgroundColor: '#ccff90',
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+};
