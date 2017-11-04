@@ -84,7 +84,7 @@ function handleClick(event) {
 function showTally() {
   for(var i = 0; i < Product.all.length; i++) {
     var liEl = document.createElement('li');
-    liEl.textContent = Product.all[i].path + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
+    liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views';
     Product.tally.appendChild(liEl);
   }
 }
