@@ -65,27 +65,38 @@ function displayPics() {
 
 function handleClick(event) {
   console.log(Product.totalClicks, 'total clicks');
-  if(Product.totalClicks > 24) {
-    Product.container.removeEventListener('click', handleClick);
-    for(var j = 0; j < Product.names.length; j++){
-      views.push(Product.all[j].views);
-      newVotes.push(Product.all[j].votes);
-    };
-    showTally();
+  if (localStorage.getItem('newVotes') === null){
+    if(Product.totalClicks > 24) {
+      Product.container.removeEventListener('click', handleClick);
+      for(var j = 0; j < Product.names.length; j++){
+        views.push(Product.all[j].views);
+        newVotes.push(Product.all[j].votes);
+      };
+      var newVotesStringify = JSON.stringify(newVotes);
+      localStorage.setItem('newVotes', newVotesStringify);
+      showTally();
+      makeChart();
+    }
+    if (event.target.id === 'image_container') {
+      return alert('Only click on images...not outside of them.');
+    }
+    Product.totalClicks += 1;
+    for(var i = 0; i < Product.names.length; i++) {
+      if(event.target.id === Product.all[i].name) {
+        Product.all[i].votes += 1;
+        console.log(event.target.id + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views');
+      }
+    }
+
+    displayPics();
+  } else {
+    var getnewVotes = localStorage.getItem('newVotes');
+    newVotes = JSON.parse(getnewVotes);
+    console.log(newVotes + 'this is the new votes after parsing');
     makeChart();
   }
-  if (event.target.id === 'image_container') {
-    return alert('Only click on images...not outside of them.');
-  }
-  Product.totalClicks += 1;
-  for(var i = 0; i < Product.names.length; i++) {
-    if(event.target.id === Product.all[i].name) {
-      Product.all[i].votes += 1;
-      console.log(event.target.id + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views');
-    }
-  }
-  displayPics();
-}
+
+};
 //Function to take the tally of clicks and add to the DOM
 function showTally() {
   for(var i = 0; i < Product.names.length; i++) {
